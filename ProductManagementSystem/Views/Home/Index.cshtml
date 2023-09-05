@@ -1,0 +1,39 @@
+﻿@model ProductManagementSystem.Models.UserModel
+<br />
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100">
+                <img src="~/user.png" alt="User Reference Image" height="100px" width="100px" style="margin: 10px; padding: 10px;" />
+                <h1 class="display-2" style="font-weight: bold;">Welcome</h1>
+                <h4 class="mb-4" style="background: #e3e2e2; padding: 10px; border-radius: 4px; color: #222232">
+                    @Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)
+                    <sup style="background: #FFD6D8; box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" class="rounded">
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <span class="role text-dark p-1 rounded-3 font-weight-bold" style=" font-size: 12px; color: #404040;">Super Admin</span>
+                        }
+                        else if (User.IsInRole("Admin"))
+                        {
+                            <span class="role text-dark p-1 rounded" style="font-size: 12px;">Admin</span>
+                        }
+                        else
+                        {
+                            <span class="role text-dark p-1 rounded" style="font-size: 12px;">User</span>
+                        }
+                    </sup>
+                </h4>
+                <p class="text-dark border-bottom" style="padding: 16px;">@Html.DisplayFor(model => model.Email)</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <img src="~/Profile.svg" alt="Profile details image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>

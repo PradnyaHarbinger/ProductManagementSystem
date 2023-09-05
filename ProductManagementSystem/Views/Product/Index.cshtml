@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ProductManagementSystem.Models.ProductModel>
+@using ProductManagementSystem.Data;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Product Details</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-dark"><i class="bi bi-plus-circle"></i> Add Product</a>
+    </p>
+}
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+    @foreach (var product in Model)
+    {
+        <div class="col">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => product.Name)</h5>
+                            <p class="card-text">
+                                <small class="text-muted">Category - @Html.DisplayFor(modelItem => product.Category)</small>
+                            </p>
+                            <p class="card-text">
+                                @{
+                                    var words = product.Description.Split(' ');
+                                    var limitedDescription = string.Join(' ', words.Take(15));
+                                    @limitedDescription
+                                }...
+                            </p>
+                            <p class="card-text">
+                                <small class="btn btn-outline-dark w-100">Price Rs.@Html.DisplayFor(modelItem => product.Price)/-</small>
+                            </p>
+
+                            <p>
+                                <a asp-action="Details" asp-route-id="@product.ProdId" class="btn btn-info">Details</a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Update" asp-route-id="@product.ProdId" class="btn btn-success">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@product.ProdId" class="btn btn-danger">Delete</a>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

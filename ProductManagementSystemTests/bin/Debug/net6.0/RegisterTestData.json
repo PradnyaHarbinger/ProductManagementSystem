@@ -1,0 +1,23 @@
+[
+  {
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Email": null,
+    "Password": "User@456",
+    "ConfirmPassword": "User@456"
+  },
+  {
+    "FirstName": "Alice",
+    "LastName": null,
+    "Email": "alice@test.com",
+    "Password": "User@789",
+    "ConfirmPassword": "User@789"
+  },
+  {
+    "FirstName": null,
+    "LastName": "MissingFirstName",
+    "Email": "missingfirstname@test.com",
+    "Password": "User@123",
+    "ConfirmPassword": "User@123"
+  }
+]

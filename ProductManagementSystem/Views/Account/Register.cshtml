@@ -1,0 +1,71 @@
+﻿@model ProductManagementSystem.Models.DTO.RegisterModel
+
+<h1>Register</h1>
+
+<div class="row">
+    <div class="col-8">
+        <form asp-action="Register" method="post" role="form">
+            <h4>Create a new account</h4>
+            <hr />
+            @*<div asp-validation-summary="All" class="text-danger"></div> asp-route-returnurl="@ViewData["ReturnUrl"]"*@
+            <div class="form-group">
+                <label asp-for="FirstName" class="col-md-2 form-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName" class="col-md-2 form-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="col-md-2 form-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password" class="col-md-2 form-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="col-md-2 form-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2 mt-3 mb-3">
+                    <button type="submit" class="btn btn-success form-control">Register</button>
+                </div>
+            </div>
+
+            <p>
+                <a asp-action="Login" asp-controller="Account" class="text-decoration-none text-black"><i class="bi bi-person-check-fill"></i> Already a user?</a>
+            </p>
+
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

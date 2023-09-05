@@ -1,0 +1,63 @@
+﻿@model ProductManagementSystem.Models.DTO.LoginModel
+
+<h1>Login</h1>
+
+<div class="row">
+    <div class="col-8">
+        <form asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
+            <h4>Already have an account</h4>
+            <hr />
+            @*<div asp-validation-summary="All" class="text-danger"></div>*@
+
+            <div class="form-group">
+                <label asp-for="Email" class="col-md-2 form-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password" class="col-md-2 form-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    <div class="custom-checkbox">
+                        <label asp-for="RememberMe">
+                            <input asp-for="RememberMe" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2 mt-2 mb-2">
+                    <button type="submit" class="btn btn-success form-control">Login</button>
+                </div>
+            </div>
+
+            <div class="mt-2 mb-2">
+                <a asp-action="Register" asp-controller="Account" class="text-decoration-none text-black"><i class="bi bi-person-x-fill"></i> New user?</a>
+            </div>
+                
+            <p class="mt-2 mb-2">
+                <a asp-action="ForgotPassword" asp-controller="Account" class="text-decoration-none text-black"><i class="bi bi-exclamation-lg"></i> Forgot your password?</a>
+            </p>
+
+        </form>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
