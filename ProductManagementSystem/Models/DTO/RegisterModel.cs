@@ -5,6 +5,14 @@ namespace ProductManagementSystem.Models.DTO
 {
     public class RegisterModel
     {
+        public RegisterModel()
+        {
+            FirstName = "";
+            LastName = "";
+            Email = "";
+            Password = "";
+            ConfirmPassword = "";
+        }
         
         [Display(Name = "First Name")]
         [Required]

@@ -5,6 +5,13 @@ namespace ProductManagementSystem.Models
 {
     public class ProductModel
     {
+        public ProductModel()
+        {
+            Name = "";
+            Description = "";
+            Category = "";
+        }
+
         [DisplayName("Id")]
         [Key]
         public Guid ProdId { get; set; }
@@ -18,12 +25,10 @@ namespace ProductManagementSystem.Models
         public string Description { get; set; }
 
         [Required]
-
         [DisplayName("Category")]
         public string Category { get; set; }
 
         [Required]
-
         [DisplayName("Price")]
         public double Price { get; set; }
 

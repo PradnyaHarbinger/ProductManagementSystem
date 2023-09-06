@@ -4,6 +4,12 @@ namespace ProductManagementSystem.Models.DTO
 {
     public class LoginModel
     {
+        public LoginModel()
+        {
+            Email = "";
+            Password = "";
+        }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }

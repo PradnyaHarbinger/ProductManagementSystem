@@ -7,6 +7,13 @@ namespace ProductManagementSystem.Models
 {
     public class UserModel : IdentityUser
     {
+        public UserModel()
+        {
+            FirstName = "";
+            LastName = "";
+            RoleId = "";
+        }
+
         [Required]
         public string FirstName { get; set; }
 

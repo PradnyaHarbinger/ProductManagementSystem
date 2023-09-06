@@ -26,7 +26,12 @@ namespace ProductManagementSystem.Services.Product
 
         public ProductModel Get(Guid id)
         {
-            return _db.Products.Find(id);
+            var product = _db.Products.Find(id);
+            if(product == null)
+            {
+                return new ProductModel();
+            }
+            return product;
         }
 
         public List<ProductModel> GetAll()

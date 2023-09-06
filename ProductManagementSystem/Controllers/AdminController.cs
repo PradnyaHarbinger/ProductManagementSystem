@@ -23,9 +23,9 @@ namespace ProductManagementSystem.Controllers
         }
 
 
-        public async Task<IActionResult> GetUser()
+        public IActionResult GetUser()
         {
-            var users = await _adminService.GetUserAsync();
+            var users = _adminService.GetUser();
             return View(users);
         }
 
@@ -34,7 +34,7 @@ namespace ProductManagementSystem.Controllers
         {
             var roleList = _adminService.GetRoleList();
 
-            AddUserModel model = new AddUserModel()
+            AddUserModel model = new()
             {
                 RoleList = roleList
             };
@@ -74,11 +74,11 @@ namespace ProductManagementSystem.Controllers
         public IActionResult Update(string userId)
         {
             var userForUpdate = _adminService.GetUserForUpdate(userId);
-
+/*
             if (userForUpdate == null)
             {
                 return NotFound(); // User not found
-            }
+            }*/
 
             return View(userForUpdate);
         }
@@ -103,11 +103,11 @@ namespace ProductManagementSystem.Controllers
 
             var userId = user.Id;
             user = await _adminService.GetUserForUpdateAsync(userId);
-
+/*
             if (user == null)
             {
                 return NotFound();
-            }
+            }*/
 
             await _adminService.PopulateRoleListAsync(user);
 

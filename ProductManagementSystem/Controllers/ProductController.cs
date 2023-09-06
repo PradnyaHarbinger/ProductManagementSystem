@@ -42,10 +42,6 @@ namespace ProductManagementSystem.Controllers
 
         public IActionResult Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
             var product = _services.DetailsAsync(id);
             if (product == null)
             {
@@ -57,10 +53,6 @@ namespace ProductManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
             _services.Remove(id);
             return RedirectToAction("Index");
         }
@@ -68,10 +60,6 @@ namespace ProductManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Update(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
             var product = _services.Get(id);
             if (product == null)
             {

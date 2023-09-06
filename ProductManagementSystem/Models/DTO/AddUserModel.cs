@@ -5,6 +5,15 @@ namespace ProductManagementSystem.Models.DTO
 {
     public class AddUserModel
     {
+        public AddUserModel()
+        {
+            FirstName = "";
+            LastName = "";
+            Email = "";
+            Password = "";
+            RoleSelected = "";
+        }
+
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

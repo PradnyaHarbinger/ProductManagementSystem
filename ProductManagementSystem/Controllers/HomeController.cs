@@ -9,13 +9,10 @@ namespace ProductManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IProfileService _profileService;
 
-        public HomeController(ILogger<HomeController> logger,
-                                IProfileService profileService)
+        public HomeController(IProfileService profileService)
         {
-            _logger = logger;
             _profileService = profileService;
         }
 
@@ -30,11 +27,6 @@ namespace ProductManagementSystem.Controllers
             }
 
             return View(currentUser);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

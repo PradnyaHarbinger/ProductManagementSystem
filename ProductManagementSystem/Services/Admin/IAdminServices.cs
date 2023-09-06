@@ -9,7 +9,7 @@ namespace ProductManagementSystem.Services.Admin
     {
         Task<IdentityResult> AddUserAsync(AddUserModel model);
         List<SelectListItem> GetRoleList();
-        Task<IEnumerable<UserModel>> GetUserAsync();
+        IEnumerable<UserModel> GetUser();
         Task<bool> UpdateUserAsync(UserModel model, string newRoleId);
         Task<UserModel> GetUserForUpdateAsync(string userId);
         Task PopulateRoleListAsync(UserModel user);

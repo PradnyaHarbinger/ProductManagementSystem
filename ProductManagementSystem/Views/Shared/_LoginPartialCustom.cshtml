@@ -4,8 +4,9 @@
 @inject UserManager<IdentityUser> UserManager;
 
 @{
-    var isLoginPage = ViewContext.RouteData.Values["Action"].ToString() == "Login";
-    var isRegisterPage = ViewContext.RouteData.Values["Action"].ToString() == "Register";
+    var actionValue = ViewContext.RouteData.Values["Action"]?.ToString();
+    var isLoginPage = actionValue == "Login";
+    var isRegisterPage = actionValue == "Register";
 }
 
 <ul class="navbar-nav">

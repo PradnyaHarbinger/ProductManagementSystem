@@ -19,7 +19,7 @@ namespace ProductManagementSystem.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            RegisterModel model = new RegisterModel();
+            RegisterModel model = new();
             return View(model);
         }
 

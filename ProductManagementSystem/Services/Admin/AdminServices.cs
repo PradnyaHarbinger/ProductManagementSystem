@@ -11,7 +11,6 @@ namespace ProductManagementSystem.Services.Admin
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         public AdminServices(UserManager<IdentityUser> userManager, ApplicationDbContext db)
         {
             _userManager = userManager;
@@ -51,8 +50,8 @@ namespace ProductManagementSystem.Services.Admin
 
         public List<SelectListItem> GetRoleList()
         {
-            List<SelectListItem> listItems = new List<SelectListItem>
-        {
+            List<SelectListItem> listItems = new()
+            {
             new SelectListItem { Value = "Admin", Text = "Admin" },
             new SelectListItem { Value = "User", Text = "User" }
         };
@@ -72,12 +71,7 @@ namespace ProductManagementSystem.Services.Admin
             return true; // User deleted successfully
         }
 
-        /*public async Task<IEnumerable<UserModel>> GetAllUsersAsync()
-        {
-            return await _userManager.Users.ToListAsync();
-        }*/
-
-        public async Task<IEnumerable<UserModel>> GetUserAsync()
+        public IEnumerable<UserModel> GetUser()
         {
             var users = _db.UserModel.ToList();
             var userRoles = _db.UserRoles.ToList();
@@ -85,7 +79,6 @@ namespace ProductManagementSystem.Services.Admin
 
             foreach (var user in users)
             {
-
                 var role = userRoles.FirstOrDefault(u => u.UserId == user.Id);
                 if (role == null)
                 {
@@ -93,12 +86,14 @@ namespace ProductManagementSystem.Services.Admin
                 }
                 else
                 {
-                    user.Role = roles.FirstOrDefault(u => u.Id == role.RoleId).Name;
+                    var userRole = roles.FirstOrDefault(u => u.Id == role.RoleId);
+                    user.Role = userRole?.Name ?? "None";
                 }
-
             }
+
             return users;
         }
+
 
         public UserModel GetUserForUpdate(string userId)
         {
@@ -106,7 +101,7 @@ namespace ProductManagementSystem.Services.Admin
 
             if (user == null)
             {
-                return null;
+                return new UserModel();
             }
             var roleList = _db.Roles.Select(u => new SelectListItem
             {
@@ -134,8 +129,11 @@ namespace ProductManagementSystem.Services.Admin
                 await _userManager.RemoveFromRoleAsync(objFromDb, previousRoleName);
             }
 
-            // Add new role
-            await _userManager.AddToRoleAsync(objFromDb, _db.Roles.FirstOrDefault(u => u.Id == newRoleId).Name);
+            var role = _db.Roles.FirstOrDefault(u => u.Id == newRoleId);
+            if (role != null)
+            {
+                await _userManager.AddToRoleAsync(objFromDb, role.Name);
+            }
 
             objFromDb.FirstName = user.FirstName;
             objFromDb.LastName = user.LastName;
@@ -146,6 +144,9 @@ namespace ProductManagementSystem.Services.Admin
         public async Task<UserModel> GetUserForUpdateAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId) as UserModel;
+            if(user == null) {
+                return new UserModel(); 
+            }
             return user;
         }
 

@@ -40,16 +40,26 @@ namespace ProductManagementSystemTests
             Assert.False(controller.ModelState.IsValid);
 
             // Check for model errors for each field
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             Assert.Contains(controller.ModelState["FirstName"].Errors, error =>
                 error.ErrorMessage == "The FirstName field is required.");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             Assert.Contains(controller.ModelState["LastName"].Errors, error =>
                 error.ErrorMessage == "The LastName field is required.");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             Assert.Contains(controller.ModelState["Email"].Errors, error =>
                 error.ErrorMessage == "The Email field is required.");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             Assert.Contains(controller.ModelState["Password"].Errors, error =>
                 error.ErrorMessage == "The Password field is required.");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             Assert.Contains(controller.ModelState["ConfirmPassword"].Errors, error =>
                 error.ErrorMessage == "The ConfirmPassword field is required.");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
 
