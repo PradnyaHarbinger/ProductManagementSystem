@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ProductManagementSystem.Controllers;
 using ProductManagementSystem.Models;
 using ProductManagementSystem.Services.Product;
 using Xunit;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace ProductManagementSystemTests
 {
@@ -56,6 +61,106 @@ namespace ProductManagementSystemTests
             productServiceMock.Verify(mock => mock.CreateAsync(validProduct), Times.Once);
         }
 
-        // Add similar test cases for other controller methods (Details, Delete, Update)
+        [Fact]
+        public void Create_AuthorizedAdmin_ReturnsView()
+        {
+            // Arrange
+            var httpContextMock = new Mock<HttpContext>();
+            var controllerContext = new ControllerContext
+            {
+                HttpContext = httpContextMock.Object
+            };
+
+            httpContextMock.SetupGet(c => c.User).Returns(new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "testuser"),
+                new Claim(ClaimTypes.Role, "Admin") // Simulate a user with Admin role
+            })));
+
+            var productServiceMock = new Mock<IProductServices>();
+            var controller = new ProductController(productServiceMock.Object)
+            {
+                ControllerContext = controllerContext
+            };
+
+            // Act
+            var result = controller.Create();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName); // Assert that the view name is null (default view)
+        }
+
+        [Fact]
+        public void Create_UnauthorizedUser_ReturnsViewResult()
+        {
+            // Arrange
+            var productServiceMock = new Mock<IProductServices>();
+            var controller = new ProductController(productServiceMock.Object);
+
+            // Mock an unauthorized user (not in "Admin" role)
+            var unauthorizedUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { }, "mock"));
+
+            // Create a mock authorization service that returns a failure result
+            var authorizationService = new Mock<IAuthorizationService>();
+            authorizationService.Setup(x => x.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, "AdminOnly"))
+                                .ReturnsAsync(AuthorizationResult.Failed());
+
+            // Configure TempData and TempDataDictionaryFactory
+            var tempDataProvider = new Mock<ITempDataProvider>();
+            var tempDataDictionaryFactory = new TempDataDictionaryFactory(tempDataProvider.Object);
+
+            // Set the authorization service and TempData for the controller's HttpContext
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = unauthorizedUser,
+                    RequestServices = new ServiceCollection()
+                        .AddSingleton(authorizationService.Object)
+                        .AddSingleton<ITempDataDictionaryFactory>(tempDataDictionaryFactory)
+                        .BuildServiceProvider()
+                }
+            };
+
+            // Act
+            var result = controller.Create();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<ViewResult>(result);
+        }
+
+
+        [Fact]
+        public void Delete_AdminUser_ReturnsRedirectToActionResult()
+        {
+            // Arrange
+            var productServiceMock = new Mock<IProductServices>();
+            var controller = new ProductController(productServiceMock.Object);
+
+            // Mock an authorized user in "Admin" role
+            var authorizedUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                                        new Claim(ClaimTypes.Role, "Admin")
+                                    }, "mock"));
+
+            // Set the authorized user for the controller's HttpContext
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = authorizedUser
+                }
+            };
+
+            // Act
+            var result = controller.Delete(Guid.NewGuid());
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<RedirectToActionResult>(result);
+        }
+
+
     }
 }

@@ -35,6 +35,14 @@ builder.Services.AddScoped<IAdminServices, AdminServices>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireRole("Admin");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

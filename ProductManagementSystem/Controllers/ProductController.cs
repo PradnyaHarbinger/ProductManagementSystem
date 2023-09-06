@@ -22,7 +22,7 @@ namespace ProductManagementSystem.Controllers
             return View(products);
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult Create()
         {
             return View();
