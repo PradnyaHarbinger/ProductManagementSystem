@@ -5,8 +5,8 @@ namespace ProductManagementSystem.Data
 {
     public class SeedDefaultUser
     {
+        private SeedDefaultUser() { }
         public static async Task SeedSuperAdmin(UserManager<IdentityUser> userManager,
-                                                RoleManager<IdentityRole> roleManager,
                                                 string Password)
         {
             var SuperAdmin = new UserModel

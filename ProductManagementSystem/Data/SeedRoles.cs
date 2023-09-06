@@ -4,7 +4,8 @@ namespace ProductManagementSystem.Data
 {
     public class SeedRoles
     {
-        public static async Task SeedRoleAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        private SeedRoles() { }
+        public static async Task SeedRoleAsync(RoleManager<IdentityRole> roleManager)
         {
             if (!await roleManager.RoleExistsAsync("SuperAdmin"))
             {

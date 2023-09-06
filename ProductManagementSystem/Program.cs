@@ -75,8 +75,8 @@ using (var scope = app.Services.CreateScope())
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var seedUserPass = builder.Configuration.GetValue<string>("SeedUserPassword");
 
-        await SeedRoles.SeedRoleAsync(userManager, roleManager);
-        await SeedDefaultUser.SeedSuperAdmin(userManager, roleManager, seedUserPass);
+        await SeedRoles.SeedRoleAsync(roleManager);
+        await SeedDefaultUser.SeedSuperAdmin(userManager, seedUserPass);
 
         logger.LogInformation("Finished seeding default data");
         logger.LogInformation("Application starting");

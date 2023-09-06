@@ -74,11 +74,11 @@ namespace ProductManagementSystem.Controllers
         public IActionResult Update(string userId)
         {
             var userForUpdate = _adminService.GetUserForUpdate(userId);
-/*
+
             if (userForUpdate == null)
             {
                 return NotFound(); // User not found
-            }*/
+            }
 
             return View(userForUpdate);
         }
@@ -103,11 +103,11 @@ namespace ProductManagementSystem.Controllers
 
             var userId = user.Id;
             user = await _adminService.GetUserForUpdateAsync(userId);
-/*
+
             if (user == null)
             {
                 return NotFound();
-            }*/
+            }
 
             await _adminService.PopulateRoleListAsync(user);
 
