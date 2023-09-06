@@ -99,7 +99,8 @@ namespace ProductManagementSystemTests
             var controller = new ProductController(productServiceMock.Object);
 
             // Mock an unauthorized user (not in "Admin" role)
-            var unauthorizedUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { }, "mock"));
+            var unauthorizedUser = new ClaimsPrincipal(new ClaimsIdentity(Array.Empty<Claim>(), "mock"));
+
 
             // Create a mock authorization service that returns a failure result
             var authorizationService = new Mock<IAuthorizationService>();
@@ -137,12 +138,14 @@ namespace ProductManagementSystemTests
         {
             // Arrange
             var productServiceMock = new Mock<IProductServices>();
+            productServiceMock.Setup(mock => mock.Remove(It.IsAny<Guid>())).Verifiable(); // Mocking the Remove method
+
             var controller = new ProductController(productServiceMock.Object);
 
             // Mock an authorized user in "Admin" role
             var authorizedUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-                                        new Claim(ClaimTypes.Role, "Admin")
-                                    }, "mock"));
+        new Claim(ClaimTypes.Role, "Admin")
+    }, "mock"));
 
             // Set the authorized user for the controller's HttpContext
             controller.ControllerContext = new ControllerContext
@@ -159,8 +162,10 @@ namespace ProductManagementSystemTests
             // Assert
             Assert.NotNull(result);
             Assert.IsType<RedirectToActionResult>(result);
-        }
 
+            // Verify that the Remove method was called
+            productServiceMock.Verify(mock => mock.Remove(It.IsAny<Guid>()), Times.Once);
+        }
 
     }
 }

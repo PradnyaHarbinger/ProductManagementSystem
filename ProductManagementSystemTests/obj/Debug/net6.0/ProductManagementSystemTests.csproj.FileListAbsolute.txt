@@ -160,4 +160,3 @@ C:\Users\Pradnya.Kharade\Documents\ASP.NET MVC\Flex-Assignment-2\ProductManageme
 C:\Users\Pradnya.Kharade\Documents\ASP.NET MVC\Flex-Assignment-2\ProductManagementSystem\ProductManagementSystemTests\obj\Debug\net6.0\ProductManagementSystemTests.pdb
 C:\Users\Pradnya.Kharade\Documents\ASP.NET MVC\Flex-Assignment-2\ProductManagementSystem\ProductManagementSystemTests\obj\Debug\net6.0\ProductManagementSystemTests.genruntimeconfig.cache
 C:\Users\Pradnya.Kharade\Documents\ASP.NET MVC\Flex-Assignment-2\ProductManagementSystem\ProductManagementSystemTests\obj\Debug\net6.0\ref\ProductManagementSystemTests.dll
-C:\Users\Pradnya.Kharade\Documents\ASP.NET MVC\Flex-Assignment-2\ProductManagementSystem\ProductManagementSystemTests\bin\Debug\net6.0\RegisterTestData.json

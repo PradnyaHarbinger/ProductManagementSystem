@@ -27,10 +27,4 @@
     <ProjectReference Include="..\ProductManagementSystem\ProductManagementSystem.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="RegisterTestData.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
