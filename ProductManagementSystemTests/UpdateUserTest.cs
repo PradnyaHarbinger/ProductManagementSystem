@@ -103,5 +103,36 @@ namespace ProductManagementSystemTests
             Assert.NotNull(result);
         }
 
+
+        [Fact]
+        public async Task Update_ValidModelState_ReturnsRedirectToAction()
+        {
+            // Arrange
+            var adminServiceMock = new Mock<IAdminServices>();
+            adminServiceMock.Setup(mock => mock.UpdateUserAsync(It.IsAny<UserModel>(), It.IsAny<string>()))
+                .ReturnsAsync(true);
+
+            var userToUpdate = new UserModel { Id = "userId", RoleId = "roleId" };
+            adminServiceMock.Setup(mock => mock.GetUserForUpdateAsync("userId"))
+                .ReturnsAsync(userToUpdate);
+
+            adminServiceMock.Setup(mock => mock.PopulateRoleListAsync(userToUpdate));
+
+            var controller = new AdminController(adminServiceMock.Object);
+
+            // Mock TempData
+            var tempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
+            controller.TempData = tempData;
+
+            // Act
+            var result = await controller.Update(userToUpdate);
+
+            // Assert
+            Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("GetUser", (result as RedirectToActionResult)?.ActionName);
+            Assert.Equal("User has been edited successfully.", tempData["Success"]);
+        }
+
     }
 }
+
