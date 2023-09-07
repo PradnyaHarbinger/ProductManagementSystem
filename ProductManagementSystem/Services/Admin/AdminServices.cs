@@ -77,17 +77,25 @@ namespace ProductManagementSystem.Services.Admin
             var userRoles = _db.UserRoles.ToList();
             var roles = _db.Roles.ToList();
 
+            var rolesById = roles.ToDictionary(r => r.Id, r => r);
+
             foreach (var user in users)
             {
-                var role = userRoles.FirstOrDefault(u => u.UserId == user.Id);
+                var role = userRoles.Find(ur => ur.UserId == user.Id);
                 if (role == null)
                 {
                     user.Role = "None";
                 }
                 else
                 {
-                    var userRole = roles.FirstOrDefault(u => u.Id == role.RoleId);
-                    user.Role = userRole?.Name ?? "None";
+                    if (rolesById.TryGetValue(role.RoleId, out var userRole))
+                    {
+                        user.Role = userRole.Name;
+                    }
+                    else
+                    {
+                        user.Role = "None";
+                    }
                 }
             }
 
