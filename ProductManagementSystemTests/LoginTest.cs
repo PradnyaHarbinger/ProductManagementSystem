@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ProductManagementSystem.Controllers;
 using ProductManagementSystem.Models.DTO;
+using ProductManagementSystem.Services.Admin;
 using ProductManagementSystem.Services.User;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,21 @@ namespace ProductManagementSystemTests
 {
     public class LoginTest
     {
+        [Fact]
+        public void Login_ReturnsViewResult()
+        {
+            // Arrange
+            var authServicesMock = new Mock<IAuthServices>();
+            var controller = new AccountController(authServicesMock.Object);
+
+            // Act
+            var result = controller.Login();
+
+            // Assert
+            Assert.IsType<ViewResult>(result);
+        }
+
+
         [Fact]
         public async Task Login_ValidCredentials_RedirectsToHomePage()
         {

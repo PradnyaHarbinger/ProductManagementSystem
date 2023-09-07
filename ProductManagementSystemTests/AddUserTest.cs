@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Moq;
 using ProductManagementSystem.Controllers;
@@ -8,6 +9,7 @@ using ProductManagementSystem.Models.DTO;
 using ProductManagementSystem.Services.Admin;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -81,5 +83,6 @@ namespace ProductManagementSystemTests
             var model = result.Model as AddUserModel;
             Assert.NotNull(model);
         }
+
     }
 }

@@ -16,6 +16,20 @@ namespace ProductManagementSystemTests
     public class RegisterationTest
     {
         [Fact]
+        public void Register_ReturnsViewResult()
+        {
+            // Arrange
+            var authServicesMock = new Mock<IAuthServices>();
+            var controller = new AccountController(authServicesMock.Object);
+
+            // Act
+            var result = controller.Register();
+
+            // Assert
+            Assert.IsType<ViewResult>(result);
+        }
+
+        [Fact]
         public async Task Register_InvalidClientInput_ReturnsViewWithModelError()
         {
             // Arrange
