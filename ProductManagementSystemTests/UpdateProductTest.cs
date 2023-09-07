@@ -28,8 +28,10 @@ namespace ProductManagementSystemTests
             var productId = Guid.NewGuid();
             var dummyProduct = new ProductModel
             {
-                ProdId = productId, // Set the ID to match the generated Guid
-                                    // Set other properties of the product as needed for your test
+                ProdId = productId,
+                Name = "Test",
+                Description = "Test",
+                Price = 100
             };
 
             // Setup the mock to return the dummyProduct when Get is called with the matching ID
@@ -165,6 +167,11 @@ namespace ProductManagementSystemTests
             var result = controller.Update(validProduct.ProdId, validProduct);
 
             // Assert
+            // Assert
+            productServiceMock.Verify(
+                mock => mock.Update(validProduct.ProdId, validProduct),
+                Times.Once
+            );
             Assert.NotNull(result);
             Assert.IsType<RedirectToActionResult>(result);
         }
