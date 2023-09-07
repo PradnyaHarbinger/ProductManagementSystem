@@ -52,14 +52,14 @@ namespace ProductManagementSystemTests
 
 
         [Fact]
-        public async Task Registration_ValidData_RedirectsToLogin()
+        public async Task Register_ValidModel_RedirectsToHomePage()
         {
+            // Arrange
             var authServiceMock = new Mock<IAuthServices>();
             authServiceMock.Setup(mock => mock.RegisterAsync(It.IsAny<RegisterModel>()))
-                            .ReturnsAsync(IdentityResult.Success);
+                           .ReturnsAsync(IdentityResult.Success);
 
             var controller = new AccountController(authServiceMock.Object);
-
             var validRegisterModel = new RegisterModel
             {
                 FirstName = "Unit",
@@ -69,13 +69,12 @@ namespace ProductManagementSystemTests
                 ConfirmPassword = "User@123"
             };
 
-            //Act
+            // Act
             var result = await controller.Register(validRegisterModel) as RedirectToActionResult;
 
+            // Assert
             Assert.NotNull(result);
-            Assert.Equal("Login", result.ActionName);
-
-
+            Assert.Equal("Index", result.ActionName);
         }
 
 
@@ -105,6 +104,32 @@ namespace ProductManagementSystemTests
         }
 
 
-        
+        [Fact]
+        public async Task Register_DuplicateEmail_ReturnsViewWithError()
+        {
+            var authServiceMock = new Mock<IAuthServices>();
+            authServiceMock.Setup(mock => mock.RegisterAsync(It.IsAny<RegisterModel>()))
+                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Code = "DuplicateEmail", Description = "Email is already registered." }));
+
+            var controller = new AccountController(authServiceMock.Object);
+
+            var duplicateEmailModel = new RegisterModel
+            {
+                FirstName = "Unit",
+                LastName = "TestCase",
+                Email = "existing-email@test.com", // Email already exists
+                Password = "User@123",
+                ConfirmPassword = "User@123"
+            };
+
+            var result = await controller.Register(duplicateEmailModel) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.False(controller.ModelState.IsValid);
+            Assert.Contains(controller.ModelState.Values.SelectMany(v => v.Errors), e => e.ErrorMessage == "Email is already registered.");
+        }
+
+
+
     }
 }

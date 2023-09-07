@@ -33,13 +33,20 @@ namespace ProductManagementSystem.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Login");
+                    return RedirectToAction("Index","Home");
                 }
                 else
                 {
                     foreach (var error in result.Errors)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        if (error.Code == "PasswordComplexityFailure")
+                        {
+                            ModelState.AddModelError("Password", "Password does not meet complexity requirements.");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
                     }
                 }
             }
