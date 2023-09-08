@@ -63,7 +63,7 @@ namespace ProductManagementSystem.Controllers
             return View(model);
         }
 
-        private void AddErrors(IdentityResult result)
+        public void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {

@@ -178,6 +178,26 @@ namespace ProductManagementSystemTests
                 Assert.True(false, "AddErrors method not found"); // Handle case where methodInfo is null
             }
         }
-        
+
+        [Fact]
+        public void AddErrors_AddsErrorsToModelState()
+        {
+            // Arrange
+            var mockAdminServices = new Mock<IAdminServices>(); // Create a mock for IAdminServices
+            var controller = new AdminController(mockAdminServices.Object); // Pass the mock to the constructor
+            var identityResult = IdentityResult.Failed(new IdentityError { Code = "Error1", Description = "Error Description 1" },
+                                                      new IdentityError { Code = "Error2", Description = "Error Description 2" });
+
+            // Act
+            controller.AddErrors(identityResult);
+
+            // Assert
+            Assert.False(controller.ModelState.IsValid);
+
+            var errors = controller.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            Assert.Contains("Error Description 1", errors);
+            Assert.Contains("Error Description 2", errors);
+        }
+
     }
 }
