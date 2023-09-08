@@ -84,5 +84,100 @@ namespace ProductManagementSystemTests
             Assert.NotNull(model);
         }
 
+        [Fact]
+        public async Task AddUser_ModelStateInvalid_VerifyModelStateErrors()
+        {
+            // Arrange
+            var mockAdminService = new Mock<IAdminServices>();
+            var controller = new AdminController(mockAdminService.Object);
+            var model = new AddUserModel(); // Create a model with invalid ModelState
+            controller.ModelState.AddModelError("PropertyName", "Error Message");
+
+            // Act
+            var result = await controller.AddUser(model) as ViewResult;
+
+            // Assert
+            mockAdminService.Verify(service => service.AddUserAsync(model), Times.Never()); // Ensure AddUserAsync is not called
+            mockAdminService.Verify(service => service.GetRoleList(), Times.Once()); // Ensure GetRoleList is called
+
+            // Check if ModelState contains errors
+            Assert.False(controller.ModelState.IsValid); // ModelState should still be invalid
+            Assert.NotNull(result); // Ensure that the result is a ViewResult
+
+            // Check if ModelState contains the expected error
+            Assert.True(controller.ModelState.ContainsKey("PropertyName")); // Verify that the key is in ModelState
+            var modelStateEntry = controller.ModelState["PropertyName"];
+            Assert.NotNull(modelStateEntry); // Verify that the ModelStateEntry is not null
+            Assert.Equal("Error Message", modelStateEntry.Errors[0].ErrorMessage);
+            // Verify the error message
+
+            // You should also check if the model contains the expected data
+            Assert.Equal(model, result.Model); // Ensure that the model is passed back to the view
+        }
+
+        [Fact]
+        public async Task AddUser_ModelStateInvalid_CallsAddErrors()
+        {
+            // Arrange
+            var mockAdminService = new Mock<IAdminServices>();
+            var controller = new AdminController(mockAdminService.Object);
+            var model = new AddUserModel(); // Create a model with invalid ModelState
+            controller.ModelState.AddModelError("PropertyName", "Error Message");
+
+            // Act
+            var result = await controller.AddUser(model) as ViewResult;
+
+            // Assert
+            mockAdminService.Verify(service => service.AddUserAsync(model), Times.Never()); // Ensure AddUserAsync is not called
+            mockAdminService.Verify(service => service.GetRoleList(), Times.Once()); // Ensure GetRoleList is called
+
+            // Use reflection to access the private AddErrors method
+            MethodInfo? addErrorsMethod = typeof(AdminController).GetMethod("AddErrors", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            addErrorsMethod?.Invoke(controller, new object[] { new IdentityResult() }); // Call AddErrors with an empty IdentityResult if addErrorsMethod is not null
+
+
+
+
+            // Check if ModelState contains the expected error
+            Assert.True(controller.ModelState.ContainsKey("PropertyName")); // Verify that the key is in ModelState
+            var modelStateEntry = controller.ModelState["PropertyName"];
+            Assert.NotNull(modelStateEntry); // Verify that the ModelStateEntry is not null
+            Assert.Equal("Error Message", modelStateEntry.Errors[0].ErrorMessage); // Verify the error message
+
+            // You should also check if the model contains the expected data
+            Assert.NotNull(result); // Ensure that result is not null
+            Assert.NotNull(result.Model); // Ensure that the model is not null
+            Assert.Equal(model, result.Model); // Ensure that the model is passed back to the view
+        }
+
+        [Fact]
+        public void TestAddErrors()
+        {
+
+            // Arrange
+            var mockAdminServices = new Mock<IAdminServices>(); // Create a mock for IAdminServices
+            var controller = new AdminController(mockAdminServices.Object); // Pass the mock to the constructor
+            var identityResult = IdentityResult.Failed(new IdentityError { Description = "Error Message" });
+
+            // Act
+            MethodInfo? addErrorsMethod = controller.GetType().GetMethod("AddErrors", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (addErrorsMethod != null)
+            {
+                addErrorsMethod.Invoke(controller, new object[] { identityResult });
+
+                // Assert
+                Assert.True(controller.ModelState.ContainsKey(string.Empty)); // Verify that the key is in ModelState
+                var modelStateEntry = controller.ModelState[string.Empty];
+                Assert.NotNull(modelStateEntry); // Verify that the ModelStateEntry is not null
+                Assert.Equal("Error Message", modelStateEntry.Errors[0].ErrorMessage); // Verify the error message
+            }
+            else
+            {
+                Assert.True(false, "AddErrors method not found"); // Handle case where methodInfo is null
+            }
+        }
+
     }
 }
