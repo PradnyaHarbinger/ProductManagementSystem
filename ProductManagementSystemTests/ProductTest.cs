@@ -144,8 +144,8 @@ namespace ProductManagementSystemTests
 
             // Mock an authorized user in "Admin" role
             var authorizedUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-        new Claim(ClaimTypes.Role, "Admin")
-    }, "mock"));
+                new Claim(ClaimTypes.Role, "Admin")
+            }, "mock"));
 
             // Set the authorized user for the controller's HttpContext
             controller.ControllerContext = new ControllerContext

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hzFPlcaYMtB+vGgGmzDsqvwMy1TRxrz0EHxqau2wfbye9DLEi/CAu5nbXCKPekfXa6axo6VHuZUL3e8Oz/fW7w==",
+  "dgSpecHash": "vKnolwjhiWi0eihYLAjo3WNEoIH8cJKjnXdAb6CVuGTzp3HQt8iAVkVpr0gcxhmVO4f0whDDitbJRRtfptFBmA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Pradnya.Kharade\\Documents\\ASP.NET MVC\\Flex-Assignment-2\\ProductManagementSystem\\ProductManagementSystemTests\\ProductManagementSystemTests.csproj",
   "expectedPackageFiles": [
@@ -19,6 +19,7 @@
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.10\\microsoft.entityframeworkcore.7.0.10.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.10\\microsoft.entityframeworkcore.abstractions.7.0.10.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.10\\microsoft.entityframeworkcore.analyzers.7.0.10.nupkg.sha512",
+    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\6.0.10\\microsoft.entityframeworkcore.inmemory.6.0.10.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.10\\microsoft.entityframeworkcore.relational.7.0.10.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\7.0.10\\microsoft.entityframeworkcore.sqlserver.7.0.10.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",

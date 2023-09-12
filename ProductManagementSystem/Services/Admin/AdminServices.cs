@@ -11,42 +11,42 @@ namespace ProductManagementSystem.Services.Admin
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<IdentityUser> _userManager;
-        public AdminServices(UserManager<IdentityUser> userManager, ApplicationDbContext db)
-        {
-            _userManager = userManager;
-            _db = db;
-        }
-
-        public async Task<IdentityResult> AddUserAsync(AddUserModel model)
-        {
-            var user = new UserModel
+            public AdminServices(UserManager<IdentityUser> userManager, ApplicationDbContext db)
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                UserName = model.Email
-            };
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                // Assign roles based on selected role
-                var rolesToAdd = new List<string>();
-                if (model.RoleSelected != null && model.RoleSelected.Length > 0 && model.RoleSelected == "Admin")
-                {
-                    rolesToAdd.Add("Admin");
-                    rolesToAdd.Add("User");
-                }
-                else
-                {
-                    rolesToAdd.Add("User");
-                }
-
-                await _userManager.AddToRolesAsync(user, rolesToAdd);
+                _userManager = userManager;
+                _db = db;
             }
 
-            return result;
-        }
+            public async Task<IdentityResult> AddUserAsync(AddUserModel model)
+            {
+                var user = new UserModel
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    UserName = model.Email
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // Assign roles based on selected role
+                    var rolesToAdd = new List<string>();
+                    if (model.RoleSelected != null && model.RoleSelected.Length > 0 && model.RoleSelected == "Admin")
+                    {
+                        rolesToAdd.Add("Admin");
+                        rolesToAdd.Add("User");
+                    }
+                    else
+                    {
+                        rolesToAdd.Add("User");
+                    }
+
+                    await _userManager.AddToRolesAsync(user, rolesToAdd);
+                }
+
+                return result;
+            }
 
         public List<SelectListItem> GetRoleList()
         {
