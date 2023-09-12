@@ -92,9 +92,10 @@ namespace ProductManagementSystemTests
             // Cleanup: Delete the test database
             _dbContext.Database.EnsureDeleted();
             _dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
 
-        private Mock<UserManager<IdentityUser>> MockUserManager()
+        private static Mock<UserManager<IdentityUser>> MockUserManager()
         {
             var store = new Mock<IUserStore<IdentityUser>>();
             var userManager = new Mock<UserManager<IdentityUser>>(

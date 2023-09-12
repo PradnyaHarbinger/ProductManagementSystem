@@ -80,7 +80,7 @@ namespace ProductManagementSystemTests
             }
         }
 
-        private Mock<UserManager<IdentityUser>> MockUserManager()
+        private static Mock<UserManager<IdentityUser>> MockUserManager()
         {
             var store = new Mock<IUserStore<IdentityUser>>();
             return new Mock<UserManager<IdentityUser>>(

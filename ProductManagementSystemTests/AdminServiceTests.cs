@@ -19,7 +19,6 @@ namespace ProductManagementSystemTests
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
         private readonly Mock<UserManager<IdentityUser>> _userManagerMock;
-        private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
 
         public AdminServiceTests()
         {
@@ -41,8 +40,6 @@ namespace ProductManagementSystemTests
 
             _userManagerMock = new Mock<UserManager<IdentityUser>>(
                 Mock.Of<IUserStore<IdentityUser>>(), null, null, null, null, null, null, null, null);
-            _roleManagerMock = new Mock<RoleManager<IdentityRole>>(
-                Mock.Of<IRoleStore<IdentityRole>>(), null, null, null, null);
         }
 
         public void Dispose()
@@ -50,6 +47,7 @@ namespace ProductManagementSystemTests
             // Cleanup: Delete the test database
             _context.Database.EnsureDeleted();
             _context.Dispose();
+            GC.SuppressFinalize(this);
         }
 
 

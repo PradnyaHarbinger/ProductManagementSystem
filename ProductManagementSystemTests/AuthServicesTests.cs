@@ -140,13 +140,13 @@ namespace ProductManagementSystemTests
             signInManagerMock.Verify(m => m.SignOutAsync(), Times.Once);
         }
 
-        private Mock<UserManager<IdentityUser>> MockUserManager()
+        private static Mock<UserManager<IdentityUser>> MockUserManager()
         {
             return new Mock<UserManager<IdentityUser>>(
                 Mock.Of<IUserStore<IdentityUser>>(), null, null, null, null, null, null, null, null);
         }
 
-        private Mock<SignInManager<IdentityUser>> MockSignInManager()
+        private static Mock<SignInManager<IdentityUser>> MockSignInManager()
         {
             return new Mock<SignInManager<IdentityUser>>(
                 MockUserManager().Object,

@@ -40,7 +40,10 @@ namespace ProductManagementSystemTests
             var productServices = new ProductServices(_context);
             var product = new ProductModel
             {
-                // Initialize product properties as needed
+                Name = "test",
+                Description = "test",
+                Category = "test",
+                Price = 1
             };
 
             // Act
@@ -61,7 +64,7 @@ namespace ProductManagementSystemTests
             var product = new ProductModel
             {
                 ProdId = productId,
-                // Initialize product properties as needed
+                Name = "test"
             };
 
             _context.Products.Add(product);
@@ -85,7 +88,7 @@ namespace ProductManagementSystemTests
             var product = new ProductModel
             {
                 ProdId = productId,
-                // Initialize product properties as needed
+                Name= "test"
             };
 
             _context.Products.Add(product);
@@ -97,7 +100,6 @@ namespace ProductManagementSystemTests
             // Assert
             Assert.NotNull(result);
             Assert.Equal(productId, result.ProdId);
-            // Add more assertions for the product properties
         }
 
         [Fact]
@@ -127,7 +129,6 @@ namespace ProductManagementSystemTests
             // Assert
             Assert.NotNull(result);
             Assert.IsType<List<ProductModel>>(result);
-            // Add more assertions for the products in the list
         }
 
         [Fact]
@@ -139,7 +140,6 @@ namespace ProductManagementSystemTests
             var product = new ProductModel
             {
                 ProdId = productId,
-                // Initialize product properties as needed
             };
 
             _context.Products.Add(product);
@@ -158,9 +158,9 @@ namespace ProductManagementSystemTests
             // Add some initial products to the in-memory database for testing
             var products = new[]
             {
-                new ProductModel { ProdId = Guid.NewGuid(), /* Initialize other properties */ },
-                new ProductModel { ProdId = Guid.NewGuid(), /* Initialize other properties */ },
-                new ProductModel { ProdId = Guid.NewGuid(), /* Initialize other properties */ },
+                new ProductModel { ProdId = Guid.NewGuid()},
+                new ProductModel { ProdId = Guid.NewGuid()},
+                new ProductModel { ProdId = Guid.NewGuid()},
             };
 
             _context.Products.AddRange(products);
@@ -178,7 +178,8 @@ namespace ProductManagementSystemTests
             var updatedProduct = new ProductModel
             {
                 ProdId = productToUpdate.ProdId,
-                /* Update product properties as needed */
+               Name = "test",
+               Category = "Update"
             };
 
             var productServices = new ProductServices(_context);
@@ -192,7 +193,6 @@ namespace ProductManagementSystemTests
             // Assert
             var retrievedProduct = _context.Products.Find(productToUpdate.ProdId);
             Assert.NotNull(retrievedProduct);
-            // Add more assertions for the updated product properties
         }
 
 
@@ -201,6 +201,7 @@ namespace ProductManagementSystemTests
             // Cleanup: Delete the test database
             _context.Database.EnsureDeleted();
             _context.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace ProductManagementSystemTests
         }
 
         // Helper method to create a mock for UserManager<IdentityUser>
-        private Mock<UserManager<IdentityUser>> MockUserManager(UserModel user)
+        private static Mock<UserManager<IdentityUser>> MockUserManager(UserModel user)
         {
             var store = new Mock<IUserStore<IdentityUser>>();
             var userManagerMock = new Mock<UserManager<IdentityUser>>(
