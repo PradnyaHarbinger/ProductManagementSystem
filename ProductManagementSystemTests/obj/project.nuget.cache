@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "vKnolwjhiWi0eihYLAjo3WNEoIH8cJKjnXdAb6CVuGTzp3HQt8iAVkVpr0gcxhmVO4f0whDDitbJRRtfptFBmA==",
+  "dgSpecHash": "07LErHLkktmMgCDKxgBdg0VWAUuFa8kb9yK5M9lCj1/tVjtOAQXM8Rav4DlEbqF7XE34uwizV03wQuQVb6RlrA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Pradnya.Kharade\\Documents\\ASP.NET MVC\\Flex-Assignment-2\\ProductManagementSystem\\ProductManagementSystemTests\\ProductManagementSystemTests.csproj",
   "expectedPackageFiles": [
@@ -16,10 +16,10 @@
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.2\\microsoft.data.sqlclient.5.0.2.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.0.1\\microsoft.data.sqlclient.sni.runtime.5.0.1.nupkg.sha512",
-    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.10\\microsoft.entityframeworkcore.7.0.10.nupkg.sha512",
-    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.10\\microsoft.entityframeworkcore.abstractions.7.0.10.nupkg.sha512",
-    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.10\\microsoft.entityframeworkcore.analyzers.7.0.10.nupkg.sha512",
-    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\6.0.10\\microsoft.entityframeworkcore.inmemory.6.0.10.nupkg.sha512",
+    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.11\\microsoft.entityframeworkcore.7.0.11.nupkg.sha512",
+    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.11\\microsoft.entityframeworkcore.abstractions.7.0.11.nupkg.sha512",
+    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.11\\microsoft.entityframeworkcore.analyzers.7.0.11.nupkg.sha512",
+    "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\7.0.11\\microsoft.entityframeworkcore.inmemory.7.0.11.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.10\\microsoft.entityframeworkcore.relational.7.0.10.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\7.0.10\\microsoft.entityframeworkcore.sqlserver.7.0.10.nupkg.sha512",
     "C:\\Users\\Pradnya.Kharade\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",

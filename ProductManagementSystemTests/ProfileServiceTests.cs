@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ProductManagementSystem.Data;
 using ProductManagementSystem.Models;
-using ProductManagementSystem.Models.DTO;
 using ProductManagementSystem.Services.Profile;
 using Xunit;
 
@@ -19,17 +15,13 @@ namespace ProductManagementSystemTests
     public class ProfileServiceTests : IDisposable
     {
         private readonly DbContextOptions<ApplicationDbContext> _options;
-        private readonly string _connectionString;
         private readonly ApplicationDbContext _dbContext;
 
         public ProfileServiceTests()
         {
-            // Set the connection string to your local SQL Server (LocalDB) instance
-            _connectionString = "Server=(localdb)\\mssqllocaldb;Database=ProfileDb;Trusted_Connection=True;MultipleActiveResultSets=true";
-
-            // Configure the DbContext options to use SQL Server (LocalDB)
+            // Configure the DbContext options to use an in-memory database
             _options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlServer(_connectionString)
+                .UseInMemoryDatabase(databaseName: "ProfileServiceDb") // Use a unique database name
                 .Options;
 
             // Initialize the database with schema and test data
@@ -56,11 +48,11 @@ namespace ProductManagementSystemTests
                 UserName = "user@example.com"
             };
 
-            var userClaimsPrincipal = new System.Security.Claims.ClaimsPrincipal(new System.Security.Claims.ClaimsIdentity(new[]
+            var userClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
             {
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, identityUser.UserName),
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Email, identityUser.Email),
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, identityUser.Id),
+                new Claim(ClaimTypes.Name, identityUser.UserName),
+                new Claim(ClaimTypes.Email, identityUser.Email),
+                new Claim(ClaimTypes.NameIdentifier, identityUser.Id),
             }));
 
             userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
@@ -89,8 +81,7 @@ namespace ProductManagementSystemTests
 
         public void Dispose()
         {
-            // Cleanup: Delete the test database
-            _dbContext.Database.EnsureDeleted();
+            // Cleanup: The in-memory database is automatically deleted when the DbContext is disposed
             _dbContext.Dispose();
             GC.SuppressFinalize(this);
         }

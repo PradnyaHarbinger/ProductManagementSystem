@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ProductManagementSystem.Data;
@@ -16,27 +14,22 @@ namespace ProductManagementSystemTests
 {
     public class AdminServiceTests : IDisposable
     {
-        private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
         private readonly Mock<UserManager<IdentityUser>> _userManagerMock;
 
         public AdminServiceTests()
         {
-            // Load configuration from appsettings.json
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-                
-            // Setup the database context
-            var connectionString = _configuration.GetConnectionString("TestConnectionString2");
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlServer(connectionString)
-                .Options;
-            _context = new ApplicationDbContext(options);
+            // Set up the in-memory database context
+            var serviceProvider = new ServiceCollection()
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
 
-            // Ensure the database is created and migrations are applied
-            _context.Database.EnsureCreated();
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "AdminServiceTestDb")
+                .UseInternalServiceProvider(serviceProvider)
+                .Options;
+
+            _context = new ApplicationDbContext(options);
 
             _userManagerMock = new Mock<UserManager<IdentityUser>>(
                 Mock.Of<IUserStore<IdentityUser>>(), null, null, null, null, null, null, null, null);
@@ -44,12 +37,11 @@ namespace ProductManagementSystemTests
 
         public void Dispose()
         {
-            // Cleanup: Delete the test database
+            // Dispose of the in-memory database context
             _context.Database.EnsureDeleted();
             _context.Dispose();
             GC.SuppressFinalize(this);
         }
-
 
         [Fact]
         public void GetUser_ReturnsUsersWithRoles()
@@ -79,13 +71,6 @@ namespace ProductManagementSystemTests
             // Verify that roles are correctly assigned to users
             Assert.Equal("Admin", userList[0].Role);
             Assert.Equal("User", userList[1].Role);
-
-            // Delete the added data
-            _context.Users.Remove(user1);
-            _context.Users.Remove(user2);
-            _context.UserRoles.RemoveRange(_context.UserRoles);
-            _context.Roles.RemoveRange(_context.Roles);
-            _context.SaveChanges();
         }
 
         [Fact]
@@ -136,6 +121,5 @@ namespace ProductManagementSystemTests
             Assert.NotNull(result);
             Assert.NotEqual(userId, result.Id);
         }
-
     }
 }

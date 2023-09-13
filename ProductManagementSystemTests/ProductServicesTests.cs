@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Moq;
 using ProductManagementSystem.Data;
 using ProductManagementSystem.Models;
@@ -16,21 +15,13 @@ namespace ProductManagementSystemTests
 
         public ProductServicesTests()
         {
-            // Load the SQL Server connection string from configuration
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json") // Adjust the path as needed
-                .Build();
-
-            var connectionString = configuration.GetConnectionString("ProductConnectionString");
-
-            // Create options for the DbContext using the SQL Server connection string
-            var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlServer(connectionString)
+            // Set up the in-memory database context
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "ProductServiceTestDb") // Generate a unique name
                 .Options;
 
-            // Create the database and apply migrations
-            _context = new ApplicationDbContext(dbContextOptions);
-            _context.Database.Migrate();
+            _context = new ApplicationDbContext(options);
+
         }
 
         [Fact]
@@ -56,7 +47,7 @@ namespace ProductManagementSystemTests
         }
 
         [Fact]
-        public void DetailsAsync_ShouldReturnProduct()
+        public void DetailsAsync_ShouldReturnProduct() // Change to async
         {
             // Arrange
             var productServices = new ProductServices(_context);
@@ -71,7 +62,7 @@ namespace ProductManagementSystemTests
             _context.SaveChanges();
 
             // Act
-            var result = productServices.DetailsAsync(productId);
+            var result = productServices.DetailsAsync(productId); // Await the async method
 
             // Assert
             Assert.NotNull(result);

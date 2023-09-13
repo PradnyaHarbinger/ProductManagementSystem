@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using ProductManagementSystem.Data;
@@ -16,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProductManagementSystemTests
 {
-    public class UserServiceTests
+    public class UserServiceTests : IDisposable
     {
         private readonly ServiceProvider _serviceProvider;
         private readonly ApplicationDbContext _dbContext;
@@ -26,33 +25,28 @@ namespace ProductManagementSystemTests
         public UserServiceTests()
         {
             // Arrange: Setup the services
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json") // Use your test configuration file
-                .Build();
+            var services = new ServiceCollection();
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("TestConnectionString"), options =>
+            // Configure the DbContext to use an in-memory database
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.EnableRetryOnFailure();
+                options.UseInMemoryDatabase(databaseName: "UserServiceTestDb");
             });
 
-            _dbContext = new ApplicationDbContext(optionsBuilder.Options);
+            // Add Identity services with in-memory database
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             _userManagerMock = new Mock<UserManager<IdentityUser>>(Mock.Of<IUserStore<IdentityUser>>(), null, null, null, null, null, null, null, null);
             _roleManagerMock = new Mock<RoleManager<IdentityRole>>(Mock.Of<IRoleStore<IdentityRole>>(), null, null, null, null);
 
-            _serviceProvider = new ServiceCollection()
-                .AddDbContext<ApplicationDbContext>(options =>
-                {
-                    options.UseSqlServer(configuration.GetConnectionString("TestConnectionString"));
-                })
-                .AddIdentity<IdentityUser, IdentityRole>() // Use the default IdentityUser and IdentityRole
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .Services
-                .AddSingleton(_userManagerMock.Object)
-                .AddSingleton(_roleManagerMock.Object)
-                .BuildServiceProvider();
+            services.AddSingleton(_userManagerMock.Object);
+            services.AddSingleton(_roleManagerMock.Object);
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            // Create a new instance of the ApplicationDbContext to be used during cleanup
+            _dbContext = _serviceProvider.GetRequiredService<ApplicationDbContext>();
         }
 
         [Fact]
@@ -147,11 +141,11 @@ namespace ProductManagementSystemTests
             );
         }
 
-        
-        // Cleanup the test database after all tests
-        public void Cleanup_TestDatabase()
+        public void Dispose()
         {
-            _dbContext.Database.EnsureDeleted();
+            // Cleanup: Dispose of the DbContext and Service Provider
+            _dbContext.Dispose();
+            _serviceProvider.Dispose();
         }
     }
 }

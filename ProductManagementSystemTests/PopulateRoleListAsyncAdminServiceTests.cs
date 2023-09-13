@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Moq;
+using Microsoft.Extensions.DependencyInjection;
 using ProductManagementSystem.Data;
 using ProductManagementSystem.Models;
 using ProductManagementSystem.Services.Admin;
@@ -12,8 +10,33 @@ using Xunit;
 
 namespace ProductManagementSystemTests
 {
-    public class PopulateRoleListAsyncAdminServiceTests
+    public class PopulateRoleListAsyncAdminServiceTests : IDisposable
     {
+        private readonly ApplicationDbContext _context;
+
+        public PopulateRoleListAsyncAdminServiceTests()
+        {
+            // Set up the in-memory database context
+            var serviceProvider = new ServiceCollection()
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
+
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "PopulateRoleListAdminServiceDb")
+                .UseInternalServiceProvider(serviceProvider)
+                .Options;
+
+            _context = new ApplicationDbContext(options);
+        }
+
+        public void Dispose()
+        {
+            // Dispose of the in-memory database context
+            _context.Database.EnsureDeleted();
+            _context.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         [Fact]
         public async Task PopulateRoleListAsync_FetchesRolesAndPopulatesRoleList()
         {
@@ -22,32 +45,16 @@ namespace ProductManagementSystemTests
                 // Arrange
                 var user = new UserModel { Id = "user123" };
                 var roles = new List<IdentityRole>
-            {
-                new IdentityRole { Id = "role1", Name = "Admin" },
-                new IdentityRole { Id = "role2", Name = "User" },
-            };
-
-                // Load the SQL Server connection string from configuration
-                var configuration = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json") // Adjust the path as needed
-                    .Build();
-
-                var connectionString = configuration.GetConnectionString("TestConnectionString1");
-
-                // Create options for the DbContext using the SQL Server connection string
-                var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                    .UseSqlServer(connectionString)
-                    .Options;
-
-                // Create the database and populate roles
-                using (var context = new ApplicationDbContext(dbContextOptions))
                 {
-                    context.Database.EnsureCreated();
-                    context.Roles.AddRange(roles);
-                    context.SaveChanges();
-                }
+                    new IdentityRole { Id = "role1", Name = "Admin" },
+                    new IdentityRole { Id = "role2", Name = "User" },
+                };
 
-                var adminService = new AdminServices(null, new ApplicationDbContext(dbContextOptions));
+                // Add roles to the in-memory database
+                _context.Roles.AddRange(roles);
+                _context.SaveChanges();
+
+                var adminService = new AdminServices(null, _context);
 
                 // Act
                 await adminService.PopulateRoleListAsync(user);
@@ -55,13 +62,6 @@ namespace ProductManagementSystemTests
                 // Assert
                 Assert.NotNull(user.RoleList);
                 Assert.Equal(2, user.RoleList.Count());
-
-
-                // Cleanup: Delete the test database
-                using (var context = new ApplicationDbContext(dbContextOptions))
-                {
-                    context.Database.EnsureDeleted();
-                }
             }
             catch (Exception ex)
             {
